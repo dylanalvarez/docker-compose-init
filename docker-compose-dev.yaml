@@ -26,6 +26,15 @@ services:
     depends_on:
       - server
 
+  netcat_test:
+    container_name: netcat_test
+    image: subfuzion/netcat
+    entrypoint: sh -c 'echo "holi" | nc server 12345'
+    networks:
+      - testing_net
+    depends_on:
+      - server
+
 networks:
   testing_net:
     ipam:
