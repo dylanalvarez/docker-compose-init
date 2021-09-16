@@ -26,11 +26,11 @@ docker-image:
 .PHONY: docker-image
 
 docker-compose-up: docker-image
-	docker-compose -f docker-compose-dev.yaml up -d --build
+	docker-compose -f docker-compose-dev.yaml up --build
 .PHONY: docker-compose-up
 
 docker-compose-down:
-	docker-compose -f docker-compose-dev.yaml stop -t 1
+	docker-compose -f docker-compose-dev.yaml stop -t 1000
 	docker-compose -f docker-compose-dev.yaml down
 .PHONY: docker-compose-down
 
