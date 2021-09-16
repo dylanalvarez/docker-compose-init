@@ -12,19 +12,18 @@ services:
     networks:
       - testing_net
 
-  client1:
-    container_name: client1
-    image: client:latest
-    entrypoint: /client
+  build_docker_compose:
+    container_name: build_docker_compose
+    image: build_docker_compose:latest
+    entrypoint: ruby /build_docker_compose.rb
     environment:
-      - CLI_ID=1
-      - CLI_SERVER_ADDRESS=server:12345
-      - CLI_LOOP_LAPSE=1m2s
-      - CLI_LOG_LEVEL=DEBUG
-    networks:
-      - testing_net
-    depends_on:
-      - server
+      - CLIENT_COUNT=1
+    volumes:
+     - type: bind
+       source: ./docker-compose-dev.yaml
+       target: /docker-compose-dev.yaml
+       read_only: false
+    profiles: ["script"]
 
 networks:
   testing_net:
@@ -32,3 +31,4 @@ networks:
       driver: default
       config:
         - subnet: 172.25.125.0/24
+

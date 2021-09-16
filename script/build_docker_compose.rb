@@ -24,7 +24,7 @@ services:
         YAML
     )
 
-    (1..ARGV.first.to_i).map do |client_id|
+    (1..ENV["CLIENT_COUNT"].to_i).map do |client_id|
         file.write(
             <<-YAML
   client#{client_id}:
@@ -47,6 +47,19 @@ services:
 
     file.write(
         <<-YAML
+  build_docker_compose:
+    container_name: build_docker_compose
+    image: build_docker_compose:latest
+    entrypoint: ruby /build_docker_compose.rb
+    environment:
+      - CLIENT_COUNT=1
+    volumes:
+     - type: bind
+       source: ./docker-compose-dev.yaml
+       target: /docker-compose-dev.yaml
+       read_only: false
+    profiles: ["script"]
+
 networks:
   testing_net:
     ipam:
