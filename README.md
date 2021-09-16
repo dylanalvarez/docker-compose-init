@@ -129,3 +129,30 @@ conexiones en paralelo.
 El alumno puede elegir el lenguaje en el cual desarrollar el nuevo código del servidor. Si el
 alumno desea realizar las modificaciones en Python, 
 [tener en cuenta las limitaciones del lenguaje](https://wiki.python.org/moin/GlobalInterpreterLock).
+  
+# Script de demo
+
+```
+git checkout ejercicio-1
+make docker-compose-up
+make docker-compose-logs
+
+git checkout ejercicio-1.1
+editar CLIENT_COUNT 2
+make build-docker-compose
+make docker-compose-up
+git reset HEAD --hard
+
+git checkout ejercicio-2
+make docker-compose-up
+editar client/config.yaml, period 100s
+make docker-compose-up
+git reset HEAD --hard
+
+git checkout ejercicio-3
+make netcat-test
+
+git checkout ejercicio-4
+make docker-compose-up
+make docker-compose-logs
+```
