@@ -64,6 +64,9 @@ loop:
 		default:
 		}
 
+		// Uncomment for testing graceful exit in server's recv
+		// select {}
+
 		// Send
 		fmt.Fprintf(
 			c.conn,
