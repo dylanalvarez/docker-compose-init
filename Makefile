@@ -18,6 +18,7 @@ build: deps
 docker-image:
 	docker build -f ./server/Dockerfile -t "server:latest" .
 	docker build -f ./client/Dockerfile -t "client:latest" .
+	docker build -f ./script/Dockerfile -t "build_docker_compose:latest" .
 	# Execute this command from time to time to clean up intermediate stages generated 
 	# during client build (your hard drive will like this :) ). Don't left uncommented if you 
 	# want to avoid rebuilding client image every time the docker-compose-up command 
@@ -28,6 +29,10 @@ docker-image:
 docker-compose-up: docker-image
 	docker-compose -f docker-compose-dev.yaml up -d --build
 .PHONY: docker-compose-up
+
+build-docker-compose:
+	docker-compose -f docker-compose-dev.yaml run build_docker_compose
+.PHONY: build-docker-compose
 
 docker-compose-down:
 	docker-compose -f docker-compose-dev.yaml stop -t 1

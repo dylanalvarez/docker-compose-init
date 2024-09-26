@@ -1,3 +1,12 @@
+# USAGE:
+#   ruby build_docker_compose.rb <client-count>
+# 
+# For example, for 3 clients:
+#   ruby build_docker_compose.rb 3
+
+File.open('docker-compose-dev.yaml', 'w') do |file|
+    file.write(
+        <<-YAML
 version: '3'
 services:
   server:
@@ -12,6 +21,32 @@ services:
     networks:
       - testing_net
 
+        YAML
+    )
+
+    (1..ENV["CLIENT_COUNT"].to_i).map do |client_id|
+        file.write(
+            <<-YAML
+  client#{client_id}:
+    container_name: client#{client_id}
+    image: client:latest
+    entrypoint: /client
+    environment:
+      - CLI_ID=#{client_id}
+      - CLI_SERVER_ADDRESS=server:12345
+      - CLI_LOOP_LAPSE=1m2s
+      - CLI_LOG_LEVEL=DEBUG
+    networks:
+      - testing_net
+    depends_on:
+      - server
+
+            YAML
+        )
+    end
+
+    file.write(
+        <<-YAML
   build_docker_compose:
     container_name: build_docker_compose
     image: build_docker_compose:latest
@@ -31,4 +66,8 @@ networks:
       driver: default
       config:
         - subnet: 172.25.125.0/24
+
+        YAML
+    )
+end
 
